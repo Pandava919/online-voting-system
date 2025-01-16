@@ -1,0 +1,124 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.signup-main-container {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+
+}
+
+.signup-main-container .signup-container {
+    height: 520px;
+    width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.signup-main-container .signup-section {
+    height: 400px;
+    width: 550px;
+    background-color: rgba(151, 149, 149, 0.726);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    border-radius: 3px;
+}
+
+.signup-main-container .signup-section .logo-container {
+    height: 110px;
+    width: 110px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 10px;
+}
+
+.signup-section .logo-container img {
+    height: 110px;
+    width: 110px;
+    border-radius: 60%;
+    border: 10px solid white;
+}
+
+.signup-form-container {
+    width: 100%;
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    /* height: inherit; */
+}
+
+.signup-form-container form {
+    display: flex;
+    height: 270px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    margin-top: 60px;
+}
+
+.signup-form-container form .inp-container {
+    background-color: rgb(8, 211, 8);
+    width: 200px;
+    display: flex;
+    justify-content: flex-end;
+    border-radius: 10px;
+    position: relative;
+}
+
+.inp-container input {
+    padding: 10px 15px;
+    /* margin-left: 30px; */
+    border: none;
+    width: 85%;
+    outline: none;
+    border-radius: 0px 10px 10px 0px;
+}
+
+.signup-btn-container button {
+    padding: 10px 40px;
+    text-align: center;
+    background-color: rgb(8, 211, 8);
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    color: whitesmoke;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.login-link span {
+    color: white;
+}
+
+.login-link a {
+    color: white;
+}
+
+/* errors */
+.inp-section {
+    position: relative;
+}
+
+.inp-section span {
+    color: rgb(255, 0, 0);
+    top: 40px;
+    font-size: 13px;
+    position: absolute;
+    left: 20px;
+}
