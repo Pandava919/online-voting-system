@@ -24,7 +24,7 @@ app.use('/api/onlinevoting', onlineVotingRoutes)      //main route
 app.use('*', (req, res, next) => {      //wild card route
     res.status(200).json("File not found")
 })
-app.use((err, req, res, next) => {
+app.use((err, req, res, next) => {      //error handling middleware or route
     res.status(500).json({ error: true, message: err.message })
 })
 
