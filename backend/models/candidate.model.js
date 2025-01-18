@@ -20,7 +20,7 @@ let candidateSchema = new mongoose.Schema({
     },
     candidate_photo: {
         required: true,
-        type: File
+        type: String
     }
 }, {
     versionKey: false,
