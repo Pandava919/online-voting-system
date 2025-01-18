@@ -11,6 +11,7 @@ let candidateSchema = new mongoose.Schema({
     },
     candidate_contact: {
         required: true,
+        unique: true,
         type: String
     },
     candidate_address: {
