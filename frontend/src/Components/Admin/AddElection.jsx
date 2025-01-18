@@ -97,7 +97,7 @@ const AddElection = () => {
                     </div>
 
                     <div className="btn-container">
-                        <button type='submit'>Login</button>
+                        <button type='submit'>Add Election</button>
                     </div>
                 </form>
             </div>
