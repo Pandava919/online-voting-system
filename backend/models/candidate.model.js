@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 let candidateSchema = new mongoose.Schema({
     election_topic: {
         required: true,
-        type: Number
+        type: String
     },
     candidate_name: {
         required: true,
@@ -26,3 +26,5 @@ let candidateSchema = new mongoose.Schema({
     versionKey: false,
     timestamps: true
 })
+
+module.exports= mongoose.model('Candidates',candidateSchema)
