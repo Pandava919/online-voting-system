@@ -1,5 +1,6 @@
 const Users = require('../models/user.model')
 const elections = require('../models/election.model')
+const candidates = require('../models/candidate.model')
 const bcrypt = require('bcryptjs')
 const { set } = require('mongoose')
 let UserRegistrion = async (req, res, next) => {
@@ -102,7 +103,30 @@ const deleteElection = async (req, res, next) => {
 }
 
 let addCandidate = async (req, res, next) => {      //add candidate controller
-    let { election_id, candidate_id, candidate_name, candidate_contact, candidate_address, candidate_photo } = req.body;
+    let { election_id, candidate_name, candidate_contact, candidate_address, candidate_photo } = req.body;
+    if (!election_id) {
+        res.send('election id is mandatory')
+    }
+    try {
+        const isElectionAvailable = await elections.findById(election_id);
+        if (isElectionAvailable) {
+            const noOfCandidatesAdded = await candidates.countDocuments({});
+            if (isElectionAvailable?.no_of_candidates > noOfCandidatesAdded) {
+                const election_topic = isElectionAvailable?.election_topic;
+                const isCandidateAvailable = await candidates.findOne({ candidate_contact })
+                if (!isCandidateAvailable) {
+                    await candidates.create({ election_topic, candidate_name, candidate_contact, candidate_address, candidate_photo });
+                    return res.status(201).json({ error: false, message: 'Candidate added successfully' })
+                }
+                return res.status(409).json({ error: true, message: 'Candidate already present' })
+            }
+            return res.status(403).json({ error: true, message: 'Maximum number of candidates are added' })
+        }
+        return res.status(404).json({ error: true, message: 'Election is not present' })
+
+    } catch (error) {
+        next(error)
+    }
 
 }
 
