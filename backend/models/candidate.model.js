@@ -11,7 +11,6 @@ let candidateSchema = new mongoose.Schema({
     },
     candidate_contact: {
         required: true,
-        unique: true,
         type: String
     },
     candidate_address: {
@@ -27,4 +26,4 @@ let candidateSchema = new mongoose.Schema({
     timestamps: true
 })
 
-module.exports= mongoose.model('Candidates',candidateSchema)
+module.exports = mongoose.model('Candidates', candidateSchema)
