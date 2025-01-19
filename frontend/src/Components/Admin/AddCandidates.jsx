@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import '../../Styles/AddCandidate.css'
+import '../../Styles/DisplayCandidates.css'
 import UseFetch from '../../Hooks/UseFetch';
 import axios from 'axios';
+import DisplayCandidates from './DisplayCandidates';
 
 const AddCandidates = () => {
     const [formData, setFormData] = useState({
-        election_topic: "",
+        election_id: "",
         candidate_name: "",
         candidate_contact: "",
         candidate_address: "",
@@ -13,11 +15,26 @@ const AddCandidates = () => {
     });
     const [errors, setErrors] = useState({});
     const [elections, setElections] = useState([]);
+    const [candidates, setCandidates] = useState({});
     //! fetching the elections
     const { apiData, Loading } = UseFetch('http://localhost:4000/api/onlinevoting/get-elections');
     useEffect(() => {
         setElections(apiData?.data)
     }, [apiData])
+    //! fetching the candidates
+    useEffect(() => {
+        const fetchCandidates = async () => {
+            try {
+                const { data } = await axios.get('http://localhost:4000/api/onlinevoting/get-candidates');
+                console.log(data);
+                setCandidates(data?.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchCandidates()
+    }, [])
+
     //! filter the elections
     const electionTopics = elections?.filter((election) => election.status = "active")
     //! image handler
@@ -42,14 +59,14 @@ const AddCandidates = () => {
         let { name, value } = target;
         setFormData({ ...formData, [name]: value })
     }
-    //! imput validation
-    const candidateInputHandler = (formData) => {
+    //! input validation
+    const candidateInputValidation = (formData) => {
         let errors = {};
         if (!formData?.candidate_name) {
             errors.candidate_name = 'Candidate name is mandatory'
         }
-        if (!formData?.election_topic) {
-            errors.election_topic = 'Election topic is mandatory'
+        if (!formData?.election_id) {
+            errors.election_id = 'Election topic is mandatory'
         }
         if (!formData?.candidate_contact) {
             errors.candidate_contact = 'Candidate contact is mandatory'
@@ -62,25 +79,43 @@ const AddCandidates = () => {
         }
         return errors
     }
+
     //! onsubmit hander
     const onSubmitHandler = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
+        let validation = candidateInputValidation(formData);
+
+        if (Object.keys(validation).length > 0) {
+            setErrors(validation);
+            return;
+        }
         try {
-            console.log(formData.candidate_photo);
-            await axios.post('http://localhost:4000/api/onlinevoting/add-candidate', formData)
+            const electionsUploaded = await axios.post(
+                'http://localhost:4000/api/onlinevoting/addcandidate',
+                formData,
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                }
+            );
+            alert('Candidate added successfully');
+
+            const { data } = await axios.get('http://localhost:4000/api/onlinevoting/get-candidates');
+            // setCandidates(data?.data);
+            console.log(data);
 
         } catch (error) {
-            console.log(error);
-            alert(error.message)
+            console.error('Error:', error.response?.data || error.message);
+            alert(error.message);
         }
-    }
+    };
+
     return (
         <section className='addcandidate-main-container'>
             <div className="addcandidate-form-container">
                 <h1>Add New Candidate</h1>
                 <form onSubmit={onSubmitHandler}>
                     <div className="input-container">
-                        <select name="election_topic" value={formData.election_topic} onChange={onChangeHandler}>
+                        <select name="election_id" value={formData.election_id} onChange={onChangeHandler}>
                             <option value="" disabled>Select Election</option>
                             {electionTopics?.map((election) => {
                                 return (
@@ -88,24 +123,25 @@ const AddCandidates = () => {
                                 )
                             })}
                         </select>
+                        {errors?.election_id && <span>{errors?.election_id}</span>}
                     </div>
                     <div className="input-container">
                         <input type="text" name="candidate_name" value={formData.candidate_name} placeholder='Candidate name' onChange={onChangeHandler} />
-                        {/* {errors?.election_topic && <span>{errors.election_topic}</span>} */}
+                        {errors?.candidate_name && <span>{errors?.candidate_name}</span>}
                     </div>
 
                     <div className="input-container">
                         <input type="text" name='candidate_address' value={formData.candidate_address} placeholder='Candidate Address' onChange={onChangeHandler} />
-                        {/* {errors?.no_of_candidates && <span>{errors.no_of_candidates}</span>} */}
+                        {errors?.candidate_address && <span>{errors?.candidate_address}</span>}
                     </div>
                     <div className="input-container">
                         <input type="text" minLength={10} maxLength={10} name='candidate_contact' value={formData.candidate_contact} placeholder='Candidate Contact' onChange={onChangeHandler} />
-                        {/* {errors?.no_of_candidates && <span>{errors.no_of_candidates}</span>} */}
+                        {errors?.candidate_contact && <span>{errors?.candidate_contact}</span>}
                     </div>
 
                     <div className="input-container">
-                        <input type="file" placeholder='Candidate Image' onChange={onImageFileHandler} />
-                        {/* {errors?.starting_date && <span>{errors.starting_date}</span>} */}
+                        <input type="file" accept=".png, .jpeg, .jpg" aria-label='Candidate Image' onChange={onImageFileHandler} />
+                        {errors?.candidate_photo && <span>{errors?.candidate_photo}</span>}
                     </div>
 
                     <div className="btn-container">
@@ -115,7 +151,7 @@ const AddCandidates = () => {
             </div>
             <hr />
             <div className="display-candidates">
-                <h1>Candidates Details</h1>
+                <DisplayCandidates candidates={candidates} />
             </div>
         </section>
     )
