@@ -1,12 +1,19 @@
 const express = require('express')
 const connectDB = require('./helpers/connectDB')
-const users = require('./models/user.model')
 const cors = require('cors')
 let onlineVotingRoutes = require('./routes/onlinevoting.route')
 require('dotenv').config()
 
 let app = express()     //creating express application
-app.use(express.json())     //to fetch req.body data
+app.use(cors(
+    {
+        origin: "http://localhost:5173",
+        methods: ['GET', 'POST', 'DELETE', 'PUT'],
+        credentials: true
+    }
+))     //alowing access to all the ports
+
+app.use(express.json({ limit: "10mb" }))     //to fetch req.body data
 let startingServer = async () => {      //server starting
     try {
         await connectDB(process.env.MONGODB_URL)       //connecting to database
@@ -18,7 +25,6 @@ let startingServer = async () => {      //server starting
         console.log(error);
     }
 }
-app.use(cors())     //alowing access to all the ports
 app.use('/api/onlinevoting', onlineVotingRoutes)      //main route
 
 app.use('*', (req, res, next) => {      //wild card route
