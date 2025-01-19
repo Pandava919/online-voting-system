@@ -56,6 +56,7 @@ const AddElection = () => {
             let validation = validateElectionInputs(electionFormData)
             if (Object.keys(validation).length > 0) {
                 setErrors(validation)
+                return
             } else {
                 console.log("Election added successfully");
                 let electionsAddeddata = await axios.post("http://localhost:4000/api/onlinevoting/addelection", electionFormData)
