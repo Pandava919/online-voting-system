@@ -2,7 +2,6 @@ const Users = require('../models/user.model')
 const elections = require('../models/election.model')
 const candidates = require('../models/candidate.model')
 const bcrypt = require('bcryptjs')
-const { set } = require('mongoose')
 let UserRegistrion = async (req, res, next) => {
     try {
         let { voter_id, firstname, lastname, contact, password, confirmPassword } = req.body
@@ -76,12 +75,75 @@ let addElection = async (req, res, next) => {       //create election controller
         next(error)
     }
 }
+
+let addCandidate = async (req, res, next) => {
+    try {
+        console.log('Request Body:', req.body);
+        let { election_id, candidate_name, candidate_contact, candidate_address, candidate_photo } = req.body;
+
+        if (!election_id) {
+            return res.status(400).json({ error: true, message: 'Election ID is mandatory' });
+        }
+        if (!candidate_name) {
+            return res.status(400).json({ error: true, message: 'Candidate name is mandatory' });
+        }
+        if (!candidate_address) {
+            return res.status(400).json({ error: true, message: 'Candidate address is mandatory' });
+        }
+        if (!candidate_contact) {
+            return res.status(400).json({ error: true, message: 'Candidate contact is mandatory' });
+        }
+        if (!candidate_photo) {
+            return res.status(400).json({ error: true, message: 'Candidate photo is mandatory' });
+        }
+
+        const isElectionAvailable = await elections.findById(election_id);
+
+        if (isElectionAvailable) {
+            const election_topic = isElectionAvailable?.election_topic;
+            const noOfCandidatesAdded = await candidates.countDocuments({ election_topic });
+
+            if (isElectionAvailable.no_of_candidates > noOfCandidatesAdded) {
+                const isCandidateAvailable = await candidates.findOne({ election_topic, candidate_contact });
+
+                if (!isCandidateAvailable) {
+                    const data = await candidates.create({
+                        election_topic,
+                        candidate_name,
+                        candidate_contact,
+                        candidate_address,
+                        candidate_photo,
+                    });
+                    return res.status(201).json({ error: false, message: 'Candidate added successfully' });
+                }
+                return res.status(409).json({ error: true, message: 'Candidate already present' });
+            }
+            return res.status(403).json({ error: true, message: 'Maximum number of candidates are added' });
+        }
+        return res.status(404).json({ error: true, message: 'Election is not present' });
+    } catch (error) {
+        console.error('Error in Add Candidate Middleware:', error);
+        next(error);
+    }
+};
+
+
 const getElections = async (req, res, next) => {
     try {
         const today = new Date();       //today's date
         await elections.updateMany({ ending_date: { $lt: today } }, { $set: { status: "expired" } });
         let electionData = await elections.find({});
         res.status(200).json({ error: false, message: "Elections data fetched successfully", data: electionData })
+    } catch (error) {
+        console.log(error);
+        next(error)
+    }
+}
+
+const getCandidates = async (req, res, next) => {
+    try {
+        const candidatesData = await candidates.find({});
+        res.status(200).json({ error: false, message: 'fetched the cadidates successfully', data: candidatesData })
     } catch (error) {
         console.log(error);
         next(error)
@@ -102,32 +164,6 @@ const deleteElection = async (req, res, next) => {
     }
 }
 
-let addCandidate = async (req, res, next) => {      //add candidate controller
-    let { election_id, candidate_name, candidate_contact, candidate_address, candidate_photo } = req.body;
-    if (!election_id) {
-        res.send('election id is mandatory')
-    }
-    try {
-        const isElectionAvailable = await elections.findById(election_id);
-        if (isElectionAvailable) {
-            const noOfCandidatesAdded = await candidates.countDocuments({});
-            if (isElectionAvailable?.no_of_candidates > noOfCandidatesAdded) {
-                const election_topic = isElectionAvailable?.election_topic;
-                const isCandidateAvailable = await candidates.findOne({ candidate_contact })
-                if (!isCandidateAvailable) {
-                    await candidates.create({ election_topic, candidate_name, candidate_contact, candidate_address, candidate_photo });
-                    return res.status(201).json({ error: false, message: 'Candidate added successfully' })
-                }
-                return res.status(409).json({ error: true, message: 'Candidate already present' })
-            }
-            return res.status(403).json({ error: true, message: 'Maximum number of candidates are added' })
-        }
-        return res.status(404).json({ error: true, message: 'Election is not present' })
 
-    } catch (error) {
-        next(error)
-    }
 
-}
-
-module.exports = { addCandidate, addElection, UserRegistrion, userLogin, getElections, deleteElection }
+module.exports = { addCandidate, addElection, UserRegistrion, userLogin, getElections, getCandidates, deleteElection }
