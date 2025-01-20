@@ -1,6 +1,6 @@
 const express = require('express')
 const { addElection, addCandidate, UserRegistrion, userLogin, getElections, getCandidates, deleteElection } = require('../controllers/admin.controller')
-let route = express.Router()        //router
+const route = express.Router()        //router
 
 route.post('/register', UserRegistrion)
 route.post('/login', userLogin)
