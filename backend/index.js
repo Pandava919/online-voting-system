@@ -1,7 +1,8 @@
 const express = require('express')
 const connectDB = require('./helpers/connectDB')
 const cors = require('cors')
-let onlineVotingRoutes = require('./routes/onlinevoting.route')
+let onlineVotingRoutes = require('./routes/onlinevoting.route');
+let votingRoutes = require('./routes/voter.route')
 require('dotenv').config()
 
 let app = express()     //creating express application
@@ -26,6 +27,7 @@ let startingServer = async () => {      //server starting
     }
 }
 app.use('/api/onlinevoting', onlineVotingRoutes)      //main route
+app.use('/api/onlinevoting', votingRoutes)      //voting route
 
 app.use('*', (req, res, next) => {      //wild card route
     res.status(200).json("File not found")
