@@ -25,21 +25,24 @@
 }
 
 .top-section .top-container {
-    height: inherit;
+    height: 100%;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    gap: 10px;
 }
 
 .top-section .logo-container {
-    height: inherit;
+    height: 100%;
+    width: 60px;
     display: flex;
     align-items: center;
 }
 
 .top-section .logo-container img {
     height: 100%;
+    width: 100%;
 }
 
 .top-section .title-container{
