@@ -1,7 +1,7 @@
 const express = require('express')
-const { voting } = require('../controllers/voter.controller')
+const { votingMiddleware } = require('../controllers/voter.controller')
 const router = express.Router()
 
-router.get('/voting', voting)
+router.get('/voting', votingMiddleware)
 
 module.exports = router
