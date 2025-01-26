@@ -143,7 +143,11 @@ const getElections = async (req, res, next) => {
 const getCandidates = async (req, res, next) => {
     try {
         const candidatesData = await candidates.find({});
-        res.status(200).json({ error: false, message: 'fetched the cadidates successfully', data: candidatesData })
+        if (candidatesData) {
+
+           return res.status(200).json({ error: false, message: 'fetched the cadidates successfully', data: candidatesData })
+        }
+        res.status(200).json({ error: true, message: 'cadidates not found', data: candidatesData })
     } catch (error) {
         console.log(error);
         next(error)

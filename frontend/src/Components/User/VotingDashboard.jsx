@@ -2,7 +2,7 @@ import React from 'react'
 
 const VotingDashboard = () => {
     return (
-        <div style={{ color: "white" }}>
+        <div style={{ color: "black" }}>
             Voting Dashboard
         </div>
     )

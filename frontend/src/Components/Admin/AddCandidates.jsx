@@ -100,7 +100,7 @@ const AddCandidates = () => {
             alert('Candidate added successfully');
 
             const { data } = await axios.get('http://localhost:4000/api/onlinevoting/get-candidates');
-            // setCandidates(data?.data);
+            setCandidates(data?.data);
             console.log(data);
 
         } catch (error) {
