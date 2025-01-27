@@ -100,15 +100,14 @@ let addCandidate = async (req, res, next) => {
         const isElectionAvailable = await elections.findById(election_id);
 
         if (isElectionAvailable) {
-            const election_topic = isElectionAvailable?.election_topic;
-            const noOfCandidatesAdded = await candidates.countDocuments({ election_topic });
+            const noOfCandidatesAdded = await candidates.countDocuments({ election_id });
 
             if (isElectionAvailable.no_of_candidates > noOfCandidatesAdded) {
-                const isCandidateAvailable = await candidates.findOne({ election_topic, candidate_contact });
+                const isCandidateAvailable = await candidates.findOne({ election_id, candidate_contact });
 
                 if (!isCandidateAvailable) {
                     const data = await candidates.create({
-                        election_topic,
+                        election_id,
                         candidate_name,
                         candidate_contact,
                         candidate_address,
@@ -142,12 +141,17 @@ const getElections = async (req, res, next) => {
 
 const getCandidates = async (req, res, next) => {
     try {
-        const candidatesData = await candidates.find({});
-        if (candidatesData) {
+        let candidatesData = await candidates.find({}).lean();
+        let updatedCandatesData = []
 
-           return res.status(200).json({ error: false, message: 'fetched the cadidates successfully', data: candidatesData })
+        if (candidatesData) {
+            for (let i = 0; i < candidatesData.length; i++) {
+                const electionData = await elections.findById(candidatesData[i]?.election_id);
+                updatedCandatesData.push({ ...candidatesData[i], election_topic: electionData?.election_topic })
+            }
+            return res.status(200).json({ error: false, message: 'fetched the cadidates successfully', data: updatedCandatesData })
         }
-        res.status(200).json({ error: true, message: 'cadidates not found', data: candidatesData })
+        res.status(404).json({ error: true, message: 'cadidates not found', data: candidatesData })
     } catch (error) {
         console.log(error);
         next(error)

@@ -42,7 +42,7 @@
     border: none;
 }
 
-thead,
+.display-elections-section table thead,
 th {
     /* border-bottom: 1px solid; */
     /* border-top: 1px solid; */
@@ -59,12 +59,12 @@ th {
     padding: 10px 20px 10px 20px;
 }
 
-table tbody tr td {
+ .display-elections-section table tbody tr td {
     padding: 12px 15px 12px 15px;
 
 }
 
-table tbody tr td button {
+.display-elections-section table tbody tr td button {
     padding: 7px 10px;
     background-color: red;
     border: none;

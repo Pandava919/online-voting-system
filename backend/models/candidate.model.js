@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 let candidateSchema = new mongoose.Schema({
-    election_topic: {
+    election_id: {
         required: true,
         type: String
     },

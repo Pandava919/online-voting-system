@@ -63,21 +63,13 @@
     width: 100%;
     border-collapse: collapse;
     border: none;
-    position: relative;
 }
 
-table tbody {
+.display-candidates-section table tbody {
     height: auto;
 }
 
-table thead {
-    /* position: sticky; */
-    top: 0;
-    z-index: 2;
-
-}
-
-thead,
+.display-candidates-section table thead,
 th {
     border-bottom: 1px solid;
     border-top: 1px solid;
@@ -86,6 +78,9 @@ th {
     border-collapse: collapse;
     border-spacing: 0px;
     top: 0;
+    position: sticky;
+    z-index: 2;
+
 }
 
 .display-candidates-section table thead th {
@@ -95,15 +90,16 @@ th {
 
 table tbody tr td {
     padding: 12px 15px 12px 15px;
+    /* display: table-cell; */
 }
 
-table tbody tr td img {
+.display-candidates-section table tbody tr td img {
     height: 50px;
     width: 50px;
     border-radius: 10px;
 }
 
-table tbody tr td button {
+.display-candidates-section table tbody tr td button {
     padding: 7px 10px;
     background-color: red;
     border: none;
