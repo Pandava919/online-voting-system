@@ -16,9 +16,11 @@ const AddCandidates = () => {
     const [errors, setErrors] = useState({});
     const [elections, setElections] = useState([]);
     const [candidates, setCandidates] = useState({});
+    const [activeElections, setActiveElections] = useState()
     //! fetching the elections
-    const { apiData, Loading } = UseFetch('http://localhost:4000/api/onlinevoting/get-elections');
+    let { apiData, Loading } = UseFetch('http://localhost:4000/api/onlinevoting/get-elections');
     useEffect(() => {
+        console.log(apiData);
         setElections(apiData?.data)
     }, [apiData])
     //! fetching the candidates
@@ -26,7 +28,6 @@ const AddCandidates = () => {
         const fetchCandidates = async () => {
             try {
                 const { data } = await axios.get('http://localhost:4000/api/onlinevoting/get-candidates');
-                console.log(data);
                 setCandidates(data?.data);
             } catch (error) {
                 console.log(error);
@@ -36,7 +37,10 @@ const AddCandidates = () => {
     }, [])
 
     //! filter the elections
-    const electionTopics = elections?.filter((election) => election.status = "active")
+    useEffect(() => {
+        setActiveElections((prev) => prev = elections?.filter((election) => election.status === "active"))
+    }, []);
+
     //! image handler
     const onImageFileHandler = (e) => {
         const imageFile = e.target.files[0];
@@ -117,7 +121,7 @@ const AddCandidates = () => {
                     <div className="input-container">
                         <select name="election_id" value={formData.election_id} onChange={onChangeHandler}>
                             <option value="" disabled>Select Election</option>
-                            {electionTopics?.map((election) => {
+                            {activeElections?.map((election) => {
                                 return (
                                     <option value={election?._id} key={election?._id} > {election.election_topic}</option>
                                 )

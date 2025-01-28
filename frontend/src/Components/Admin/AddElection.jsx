@@ -23,6 +23,8 @@ const AddElection = () => {
 
     let { apiData, Loading } = UseFetch('http://localhost:4000/api/onlinevoting/get-elections');        //fetching elections from db
     useEffect(() => {
+        console.log(apiData);
+
         setFetchedElections(apiData?.data)
     }, [apiData])
 

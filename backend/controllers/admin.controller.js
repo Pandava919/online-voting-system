@@ -63,7 +63,7 @@ let addElection = async (req, res, next) => {       //create election controller
         const today = new Date();
         // let today = String(day.getFullYear()) + "-" + String(day.getMonth()).padStart(2, 0) + "-" + String(day.getDate()).padStart(2, 0);
 
-        if (today > ending_date) {
+        if (today > ending_date && starting_date > ending_date) {
             return res.status(400).json({ error: true, message: "starting date is greater than the ending date" })
         } else {
             status = "active";
@@ -130,7 +130,7 @@ let addCandidate = async (req, res, next) => {
 const getElections = async (req, res, next) => {
     try {
         const today = new Date();       //today's date
-        await elections.updateMany({ ending_date: { $lt: today } }, { $set: { status: "expired" } });
+        await elections.updateMany({ ending_date: { $lt: today } }, { $set: { status: "expired" } }).lean();
         let electionData = await elections.find({});
         res.status(200).json({ error: false, message: "Elections data fetched successfully", data: electionData })
     } catch (error) {
