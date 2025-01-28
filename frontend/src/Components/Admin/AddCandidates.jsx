@@ -39,7 +39,7 @@ const AddCandidates = () => {
     //! filter the elections
     useEffect(() => {
         setActiveElections((prev) => prev = elections?.filter((election) => election.status === "active"))
-    }, []);
+    }, [elections]);
 
     //! image handler
     const onImageFileHandler = (e) => {
