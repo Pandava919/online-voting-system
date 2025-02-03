@@ -14,14 +14,13 @@ const AddCandidates = () => {
         candidate_photo: ""
     });
     const [errors, setErrors] = useState({});
-    const [elections, setElections] = useState([]);
     const [candidates, setCandidates] = useState({});
     const [activeElections, setActiveElections] = useState()
     //! fetching the elections
-    let { apiData, Loading } = UseFetch('http://localhost:4000/api/onlinevoting/get-elections');
+    let { apiData, Loading } = UseFetch('http://localhost:4000/api/onlinevoting/get-active-elections');
     useEffect(() => {
         console.log(apiData);
-        setElections(apiData?.data)
+        setActiveElections(apiData?.data)
     }, [apiData])
     //! fetching the candidates
     useEffect(() => {
@@ -35,12 +34,6 @@ const AddCandidates = () => {
         }
         fetchCandidates()
     }, [])
-
-    //! filter the elections
-    useEffect(() => {
-        setActiveElections((prev) => prev = elections?.filter((election) => election.status === "active"))
-    }, [elections]);
-
     //! image handler
     const onImageFileHandler = (e) => {
         const imageFile = e.target.files[0];
