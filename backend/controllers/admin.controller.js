@@ -132,9 +132,27 @@ const getElections = async (req, res, next) => {
         const today = new Date();       //today's date
         await elections.updateMany({ ending_date: { $lt: today } }, { $set: { status: "expired" } }).lean();
         let electionData = await elections.find({});
-        res.status(200).json({ error: false, message: "Elections data fetched successfully", data: electionData })
+        if (electionData.length > 0) {
+            res.status(200).json({ error: false, message: "Elections data fetched successfully", data: electionData })
+        }
+        res.status(404).json({ error: true, message: " No Elections found", data: electionData })
     } catch (error) {
         console.log(error);
+        next(error)
+    }
+}
+const getActiveElections = async (req, res, next) => {
+    try {
+        const today = new Date();       //today's date
+        await elections.updateMany({ ending_date: { $lt: today } }, { $set: { status: "expired" } }).lean();
+        const activeElections = await elections.find({ status: "active" });
+        if (activeElections.length > 0) {
+            return res.status(200).json({ error: false, message: 'active elections fetched succesfully', data: activeElections })
+        }
+        return res.status(404).json({ error: true, message: 'No elections found', data: activeElections })
+        console.log(activeElections);
+    } catch (error) {
+        console.log(error.message);
         next(error)
     }
 }
@@ -174,4 +192,4 @@ const deleteElection = async (req, res, next) => {
 
 
 
-module.exports = { addCandidate, addElection, UserRegistrion, userLogin, getElections, getCandidates, deleteElection }
+module.exports = { addCandidate, addElection, UserRegistrion, userLogin, getElections, getActiveElections, getCandidates, deleteElection }

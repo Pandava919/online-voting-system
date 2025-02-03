@@ -24,4 +24,4 @@ let votingSchema = new mongoose.Schema({
     versionKey: false,
     timestamps: true
 })
-model.exports = mongoose.model("votings", votingSchema)
+module.exports = mongoose.model("votings", votingSchema)
