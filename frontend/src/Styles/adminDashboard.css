@@ -1,0 +1,169 @@
+.result-section {
+    padding: 0px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+}
+
+.result-section>div {
+    height: 100%;
+}
+
+h2 {
+    font-weight: normal;
+    padding: 6px 5px;
+}
+
+.result-section .election-topic {
+    background-color: rgb(8, 211, 8);
+    border-radius: 3px;
+    padding: 5px;
+}
+
+.election-topic h3 {
+    font-weight: normal;
+}
+
+.result-container {
+    width: 100%;
+    padding: 10px 0px;
+    /* height: 40vh; */
+}
+
+.result-container>div {
+    width: 100%;
+    height: 100%;
+    /* border-bottom: 2px solid grey; */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.result-container .result-headers {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    /* background-color: gray; */
+    padding-right: 350px;
+    box-shadow: 0px 2px 1px grey;
+
+}
+
+.result-container .result-headers span {
+    font-weight: 550;
+    width: 150px;
+    text-align: center;
+    padding: 5px 3px;
+}
+
+.result-container .result-content {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    height: inherit;
+}
+
+.result-content>div {
+    height: inherit;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.result-container .result-content .no-elections {
+    height: inherit;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.result-content .result {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding-right: 350px;
+    height: 50px;
+    align-items: center;
+    box-shadow: 0px 2px 1px rgb(222, 215, 215);
+
+}
+
+.result span {
+    width: 150px;
+    text-align: center;
+    font-weight: 300;
+    padding: 5px 3px;
+}
+
+.result-content .result .candidate-info {
+    display: flex;
+    height: inherit;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    margin-left: 15px;
+}
+
+.candidate-info>div {
+    width: 100px;
+    align-items: start;
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+}
+
+.candidate-info img {
+    height: inherit;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 40px;
+    border-radius: 50%;
+}
+
+.candidate-info span {
+    padding: 0;
+    width: 100px;
+    text-align: start;
+}
+
+.winner-container {
+    margin-top: 15px;
+}
+
+.winner-container h2 {
+    font-weight: 550;
+    font-size: 28px;
+}
+
+.winner-container .winner-info {
+    width: 350px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    padding-left: 5px;
+    gap: 35px;
+    box-shadow: 2px 2px 1px grey;
+
+}
+
+.winner-container .winner-info img {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+}
+
+.winner-info .winner-details {
+    display: flex;
+    flex-direction: column;
+    height: inherit;
+    align-items: flex-start;
+    padding-top: 25px;
+}
+
+.winner-details span {
+    font-size: 18px;
+}

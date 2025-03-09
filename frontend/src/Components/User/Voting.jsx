@@ -1,9 +1,9 @@
 import React from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet, useLocation, useOutletContext } from 'react-router-dom'
 import logo from '../../assets/logo.gif'
 import UserNAvbar from './UserNAvbar'
 const Voting = () => {
-    let { state } = useLocation()
+    const { state } = useLocation()
     return (
         <section className='admin-section'>
             <div className="top-section">
@@ -21,7 +21,7 @@ const Voting = () => {
                 <UserNAvbar />
             </div>
             <div className="main-section">
-                <Outlet />
+                <Outlet context={state} />
             </div>
         </section>
     )

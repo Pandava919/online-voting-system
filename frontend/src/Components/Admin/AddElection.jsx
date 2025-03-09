@@ -65,7 +65,12 @@ const AddElection = () => {
                 if (electionsAddeddata?.data?.error === true) {
                     alert(electionsAddeddata?.data?.message)
                 }
-
+                setElectionFormData({
+                    election_topic: "",
+                    no_of_candidates: "",
+                    starting_date: "",
+                    ending_date: ""
+                })
                 let { data } = await axios.get('http://localhost:4000/api/onlinevoting/get-elections');
                 setFetchedElections(data?.data)
                 console.log(data);

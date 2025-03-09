@@ -2,6 +2,7 @@ const Users = require('../models/user.model')
 const elections = require('../models/election.model')
 const candidates = require('../models/candidate.model')
 const bcrypt = require('bcryptjs')
+const votingModel = require('../models/voting.model')
 let UserRegistrion = async (req, res, next) => {
     try {
         let { voter_id, firstname, lastname, contact, password, confirmPassword } = req.body
@@ -78,7 +79,6 @@ let addElection = async (req, res, next) => {       //create election controller
 
 let addCandidate = async (req, res, next) => {
     try {
-        console.log('Request Body:', req.body);
         let { election_id, candidate_name, candidate_contact, candidate_address, candidate_photo } = req.body;
 
         if (!election_id) {
@@ -133,9 +133,9 @@ const getElections = async (req, res, next) => {
         await elections.updateMany({ ending_date: { $lt: today } }, { $set: { status: "expired" } }).lean();
         let electionData = await elections.find({});
         if (electionData.length > 0) {
-            res.status(200).json({ error: false, message: "Elections data fetched successfully", data: electionData })
+            return res.status(200).json({ error: false, message: "Elections data fetched successfully", data: electionData })
         }
-        res.status(404).json({ error: true, message: " No Elections found", data: electionData })
+        return res.status(404).json({ error: true, message: " No Elections found", data: electionData })
     } catch (error) {
         console.log(error);
         next(error)
@@ -150,7 +150,6 @@ const getActiveElections = async (req, res, next) => {
             return res.status(200).json({ error: false, message: 'active elections fetched succesfully', data: activeElections })
         }
         return res.status(404).json({ error: true, message: 'No elections found', data: activeElections })
-        console.log(activeElections);
     } catch (error) {
         console.log(error.message);
         next(error)
@@ -160,6 +159,7 @@ const getActiveElections = async (req, res, next) => {
 const getCandidates = async (req, res, next) => {
     try {
         let candidatesData = await candidates.find({}).lean();
+
         let updatedCandatesData = []
 
         if (candidatesData) {
@@ -167,7 +167,9 @@ const getCandidates = async (req, res, next) => {
                 const electionData = await elections.findById(candidatesData[i]?.election_id);
                 updatedCandatesData.push({ ...candidatesData[i], election_topic: electionData?.election_topic })
             }
-            return res.status(200).json({ error: false, message: 'fetched the cadidates successfully', data: updatedCandatesData })
+            if (updatedCandatesData.length > 0) {
+                return res.status(200).json({ error: false, message: 'fetched the cadidates successfully', data: updatedCandatesData })
+            }
         }
         res.status(404).json({ error: true, message: 'cadidates not found', data: candidatesData })
     } catch (error) {
@@ -182,6 +184,8 @@ const deleteElection = async (req, res, next) => {
         let isElectionAvailable = await elections.findById(id);
         if (isElectionAvailable) {
             await elections.findByIdAndDelete(id);
+            await candidates.deleteMany({ election_id: id })
+            await votingModel.deleteMany({ election_id: id })
             return res.status(200).json({ error: false, message: `Election ${isElectionAvailable?.election_topic} deleted successfully` })
         }
         return res.status(404).json({ error: false, message: `Election ${id} not found` })

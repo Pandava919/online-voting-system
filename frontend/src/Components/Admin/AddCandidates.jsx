@@ -27,6 +27,8 @@ const AddCandidates = () => {
         const fetchCandidates = async () => {
             try {
                 const { data } = await axios.get('http://localhost:4000/api/onlinevoting/get-candidates');
+                console.log(data);
+
                 setCandidates(data?.data);
             } catch (error) {
                 console.log(error);
@@ -94,6 +96,13 @@ const AddCandidates = () => {
                     headers: { 'Content-Type': 'application/json' },
                 }
             );
+            setFormData({
+                election_id: "",
+                candidate_name: "",
+                candidate_contact: "",
+                candidate_address: "",
+                candidate_photo: ""
+            })
             alert('Candidate added successfully');
 
             const { data } = await axios.get('http://localhost:4000/api/onlinevoting/get-candidates');

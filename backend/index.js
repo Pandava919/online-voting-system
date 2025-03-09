@@ -4,6 +4,7 @@ const cors = require('cors')
 let onlineVotingRoutes = require('./routes/onlinevoting.route');
 let votingRoutes = require('./routes/voter.route')
 require('dotenv').config()
+const port = process.env.PORT || 4000;
 
 let app = express()     //creating express application
 app.use(cors(
@@ -19,7 +20,7 @@ let startingServer = async () => {      //server starting
     try {
         await connectDB(process.env.MONGODB_URL)       //connecting to database
         console.log("database connected successfully");
-        app.listen(process.env.PORT, () => {        //listening or starting server
+        app.listen(port, () => {        //listening or starting server
             console.log("server is running");
         })
     } catch (error) {

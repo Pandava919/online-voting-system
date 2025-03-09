@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useOutletContext } from 'react-router-dom'
 import axios from 'axios';
 import logo from '../assets/logo.gif'
 import '../Styles/Login.css'

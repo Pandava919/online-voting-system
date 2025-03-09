@@ -21,6 +21,8 @@ const DisplayCandidates = ({ candidates }) => {
                             <tbody>
                                 {candidates?.map(({ election_topic, candidate_name, candidate_contact, candidate_address, candidate_photo, _id }, index) => {
                                     return (
+                                        console.log(election_topic),
+
                                         <tr key={_id}>
                                             <td>{index + 1}</td>
                                             <td><img src={candidate_photo} alt="" /></td>
