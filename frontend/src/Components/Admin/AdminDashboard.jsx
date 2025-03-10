@@ -51,7 +51,7 @@ const AdminDashboard = () => {
                     )
                   })}
                 </div>
-                : <div className='no-elections'>
+                : <div className='no-elections' style={{ paddingTop: winner ?? '100px' }}>
                   <h2>No Active Elections found</h2>
                 </div>
               }
